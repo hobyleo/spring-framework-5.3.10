@@ -1,12 +1,12 @@
 package com.hoby.service;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  * @author hoby
  * @since 2023-12-25
  */
-@Component
+@Service
 public class OrderService {
 
 }

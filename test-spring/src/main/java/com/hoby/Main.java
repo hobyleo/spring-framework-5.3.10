@@ -18,6 +18,10 @@ public class Main {
 		userService.test();
 		// userService.insertUser();
 
+		// 拿到的是getObject()返回的对象
+		System.out.println(context.getBean("myFactoryBean"));
+		// 拿到的是FactoryBean对象本身
+		System.out.println(context.getBean("&myFactoryBean"));
 
 	}
 }
