@@ -36,7 +36,7 @@ public class DataSourceConfig {
 	public DataSource dataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-		dataSource.setUrl("jdbc:mysql://192.168.10.6:3306/test/characterEncoding=utf-8&amp;useSSL=false&amp;serverTimezone=Asia/Shanghai");
+		dataSource.setUrl("jdbc:mysql://192.168.10.6:3306/test?characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai");
 		dataSource.setUsername("root");
 		dataSource.setPassword("123456");
 		return dataSource;

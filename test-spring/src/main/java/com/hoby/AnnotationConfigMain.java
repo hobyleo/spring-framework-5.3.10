@@ -1,6 +1,7 @@
 package com.hoby;
 
 import com.hoby.config.AppConfig;
+import com.hoby.entity.User;
 import com.hoby.service.UserService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -8,7 +9,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
  * @author hoby
  * @since 2023-12-25
  */
-public class Main {
+public class AnnotationConfigMain {
 
 	public static void main(String[] args) {
 
@@ -22,6 +23,8 @@ public class Main {
 		System.out.println(context.getBean("myFactoryBean"));
 		// 拿到的是FactoryBean对象本身
 		System.out.println(context.getBean("&myFactoryBean"));
+
+		System.out.println(context.getBean(User.class));
 
 	}
 }

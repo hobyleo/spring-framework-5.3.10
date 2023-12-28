@@ -61,6 +61,14 @@ public class AppConfig {
 		return messageSource;
 	}
 
+	/**
+	 * 相同类型及名字的bean只会注册一次
+	 */
+	@Bean
+	public OrderService orderService() {
+		return new OrderService();
+	}
+
 	@Bean
 	public OrderService orderService1() {
 		return new OrderService();

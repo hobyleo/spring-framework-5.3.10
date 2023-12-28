@@ -1,6 +1,7 @@
 package com.hoby.service;
 
 import com.hoby.entity.User;
+import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -13,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 2023-12-25
  */
 @Service
-public class UserService {
+public class UserService implements SmartInitializingSingleton {
 
 	@Autowired
 	private OrderService orderService;
@@ -46,6 +47,12 @@ public class UserService {
 	// 	this.orderService1 = orderService1;
 	// 	this.orderService2 = orderService2;
 	// }
+
+	@Override
+	public void afterSingletonsInstantiated() {
+		// 在所有非懒加载单例bean都创建完之后，会逐个调用每个bean的此方法
+		// ...
+	}
 
 	public void test() {
 		System.out.println("UserService.test() start");

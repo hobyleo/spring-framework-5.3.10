@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- BeanDefinition可以有父子关系，父bean可以定义为抽象的，子bean会继承父bean的属性 -->
+	<bean id="user" class="com.hoby.entity.User" scope="prototype" abstract="true"/>
+	<bean id="userService" class="com.hoby.service.UserService" parent="user"/>
+
+</beans>
