@@ -1,6 +1,7 @@
 package com.hoby.service;
 
 import com.hoby.entity.User;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,12 +10,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PreDestroy;
+
 /**
  * @author hoby
  * @since 2023-12-25
  */
 @Service
-public class UserService implements SmartInitializingSingleton {
+public class UserService implements SmartInitializingSingleton, DisposableBean {
 
 	@Autowired
 	private OrderService orderService;
@@ -74,4 +77,15 @@ public class UserService implements SmartInitializingSingleton {
 	public void innerMethod() {
 
 	}
+
+	@PreDestroy
+	public void preDestroy() {
+		System.out.println("userService preDestroy");
+	}
+
+	@Override
+	public void destroy() throws Exception {
+		System.out.println("userService destroy");
+	}
+
 }

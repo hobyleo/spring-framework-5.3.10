@@ -14,6 +14,7 @@ public class AnnotationConfigMain {
 	public static void main(String[] args) {
 
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+		context.registerShutdownHook();
 
 		UserService userService = (UserService) context.getBean("userService");
 		userService.test();
@@ -21,7 +22,7 @@ public class AnnotationConfigMain {
 
 		// 拿到的是getObject()返回的对象
 		System.out.println(context.getBean("myFactoryBean"));
-		// 拿到的是FactoryBean对象本身
+		// 拿到的是FactoryBean对象本身（添加&前缀）
 		System.out.println(context.getBean("&myFactoryBean"));
 
 		System.out.println(context.getBean(User.class));
