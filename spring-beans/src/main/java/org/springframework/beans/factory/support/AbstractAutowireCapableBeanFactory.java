@@ -1413,6 +1413,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			checkDependencies(beanName, mbd, filteredPds, pvs);
 		}
 
+		// 如果当前bean的BeanDefinition中设置了PropertyValues，那么最终将是PropertyValues中的值，覆盖@Autowired
 		if (pvs != null) {
 			applyPropertyValues(beanName, mbd, bw, pvs);
 		}
@@ -1515,6 +1516,14 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		Set<String> result = new TreeSet<>();
 		PropertyValues pvs = mbd.getPropertyValues();
 		PropertyDescriptor[] pds = bw.getPropertyDescriptors();
+
+		/*
+		 * 什么样的属性能够进行自动注入？
+		 * 1. 该属性有对应的set方法
+		 * 2. 没有在ignoreDependencyTypes中
+		 * 3. 如果该属性对应的set方法是实现的某个接口中所定义的，那么接口没有在ignoreDependencyInterfaces中
+		 * 4. 属性类型不是简单类型，比如int、Integer、int[]
+		 */
 		for (PropertyDescriptor pd : pds) {
 			if (pd.getWriteMethod() != null && !isExcludedFromDependencyCheck(pd) && !pvs.contains(pd.getName()) &&
 					!BeanUtils.isSimpleProperty(pd.getPropertyType())) {
