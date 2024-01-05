@@ -497,15 +497,20 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 	@Override
 	public String[] getBeanNamesForType(@Nullable Class<?> type, boolean includeNonSingletons, boolean allowEagerInit) {
+
+		// 如果没有冻结，就根据类型去BeanFactory找，如果冻结了，可能就跳过这个if然后去缓存中拿了
 		if (!isConfigurationFrozen() || type == null || !allowEagerInit) {
 			return doGetBeanNamesForType(ResolvableType.forRawClass(type), includeNonSingletons, allowEagerInit);
 		}
+
+		// 把当前类型所匹配的beanNames缓存起来
 		Map<Class<?>, String[]> cache =
 				(includeNonSingletons ? this.allBeanNamesByType : this.singletonBeanNamesByType);
 		String[] resolvedBeanNames = cache.get(type);
 		if (resolvedBeanNames != null) {
 			return resolvedBeanNames;
 		}
+
 		resolvedBeanNames = doGetBeanNamesForType(ResolvableType.forRawClass(type), includeNonSingletons, true);
 		if (ClassUtils.isCacheSafe(type, getBeanClassLoader())) {
 			cache.put(type, resolvedBeanNames);
@@ -522,7 +527,13 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			if (!isAlias(beanName)) {
 				try {
 					RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName);
+
 					// Only check bean definition if it is complete.
+					// 这里判断mbd允不允许获取对应类型
+					// 首先mdb不能是抽象的，然后allowEagerInit为true，则直接去推测mdb的类型，并进行匹配
+					// 如果allowEagerInit为false，那就继续判断，如果mdb还没有加载类并且是懒加载的并且不允许提前加载类，那mbd不能用来进行匹配（因为不允许提前加载类，只能在此mdb自己去创建bean对象时才能去创建类）
+					// 如果allowEagerInit为false，并且mbd已经加载类了，或者是非懒加载的，或者允许提前加载类，并且不用必须提前初始化才能获取类型，那么就可以去进行匹配了
+					// 这个条件有点复杂，但是如果只考虑大部分流程，则可以忽略这个判断，因为allowEagerInit传进来的基本上都是true
 					if (!mbd.isAbstract() && (allowEagerInit ||
 							(mbd.hasBeanClass() || !mbd.isLazyInit() || isAllowEagerClassLoading()) &&
 									!requiresEagerInitForType(mbd.getFactoryBeanName()))) {
@@ -531,7 +542,10 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 						boolean matchFound = false;
 						boolean allowFactoryBeanInit = (allowEagerInit || containsSingleton(beanName));
 						boolean isNonLazyDecorated = (dbd != null && !mbd.isLazyInit());
+
+						// 当前BeanDefinition不是FactoryBean，就是普通Bean
 						if (!isFactoryBean) {
+							// 在筛选Bean时，如果仅仅只包括单例，但是beanName对应的又不是单例，则忽略
 							if (includeNonSingletons || isSingleton(beanName, mbd, dbd)) {
 								matchFound = isTypeMatch(beanName, type, allowFactoryBeanInit);
 							}
@@ -1246,13 +1260,13 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	@Nullable
 	public Object resolveDependency(DependencyDescriptor descriptor, @Nullable String requestingBeanName,
 			@Nullable Set<String> autowiredBeanNames, @Nullable TypeConverter typeConverter) throws BeansException {
-		// 获取方法入参名字
+		// 用来获取方法参数名字
 		descriptor.initParameterNameDiscovery(getParameterNameDiscoverer());
-		// 所需要的类型是Optional
+		// 如果所需要的类型是Optional
 		if (Optional.class == descriptor.getDependencyType()) {
 			return createOptionalDependency(descriptor, requestingBeanName);
 		}
-		// 所需要的的类型是ObjectFactory，或ObjectProvider
+		// 如果所需要的的类型是ObjectFactory，或ObjectProvider
 		else if (ObjectFactory.class == descriptor.getDependencyType() ||
 				ObjectProvider.class == descriptor.getDependencyType()) {
 			return new DependencyObjectProvider(descriptor, requestingBeanName);
@@ -1310,7 +1324,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 				}
 			}
 
-			// 如果descriptor所对应的类型是数组、Map这些，就将descriptor对应的类型所匹配的所有bean方法，不用进一步做筛选了
+			// 如果descriptor所对应的类型是数组、Map这些，就将descriptor对应的类型所匹配的所有bean返回，不用进一步做筛选了
 			Object multipleBeans = resolveMultipleBeans(descriptor, beanName, autowiredBeanNames, typeConverter);
 			if (multipleBeans != null) {
 				return multipleBeans;

@@ -1,6 +1,8 @@
 package com.hoby.service;
 
+import com.hoby.annotation.RoundRobin;
 import com.hoby.entity.User;
+import com.hoby.strategy.LoadBalance;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PreDestroy;
+import java.util.Map;
 
 /**
  * @author hoby
@@ -21,11 +24,23 @@ public class UserService implements SmartInitializingSingleton, DisposableBean {
 
 	@Autowired
 	private OrderService orderService;
-	private OrderService orderService1;
-	private OrderService orderService2;
+
+	/**
+	 * 如果@Autowired的类型是一个map，且key为string类型，则spring会注入类型为value的所有bean到这个map中；
+	 * 同理，如果@Autowired的类型是一个list，spring会将list指定泛型类型的bean都注入到这个list中，如果泛型是Object，则会注入spring容器中的所有bean。
+	 */
+	@Autowired
+	private Map<String, OrderService> orderServiceMap;
+
+	@Autowired
+	private OrderInterface orderInterface;
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
+
+	@Autowired
+	@RoundRobin
+	private LoadBalance loadBalance;
 
 	/**
 	 * 自己注入自己，Spring会注入代理对象
@@ -61,6 +76,9 @@ public class UserService implements SmartInitializingSingleton, DisposableBean {
 		System.out.println("UserService.test() start");
 
 		System.out.println("orderService = " + orderService);
+		System.out.println("orderServiceMap = " + orderServiceMap);
+		System.out.println("orderInterface = " + orderInterface);
+		System.out.println("loadBalance.select() = " + loadBalance.select());
 		System.out.println("user = " + user);
 
 		System.out.println("UserService.test() end");
