@@ -23,11 +23,11 @@ public class AnnotationConfigMain {
 		// userService.insertUser();
 
 		// 拿到的是getObject()返回的对象
-		System.out.println(context.getBean("myFactoryBean"));
+		System.out.println("myFactoryBean = " + context.getBean("myFactoryBean"));
 		// 拿到的是FactoryBean对象本身（添加&前缀）
-		System.out.println(context.getBean("&myFactoryBean"));
+		System.out.println("&myFactoryBean = " + context.getBean("&myFactoryBean"));
 
-		System.out.println(context.getBean(User.class));
+		System.out.println("getBean(User.class) = " + context.getBean(User.class));
 
 	}
 }

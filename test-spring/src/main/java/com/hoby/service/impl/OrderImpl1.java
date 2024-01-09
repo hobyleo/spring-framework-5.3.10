@@ -11,7 +11,7 @@ import javax.annotation.Priority;
  * @since 2024-01-04
  */
 @Component
-@Priority(1)
+@Priority(1) // 数值越小，优先级越高
 public class OrderImpl1 implements OrderInterface, BeanNameAware {
 
 	private String beanName;

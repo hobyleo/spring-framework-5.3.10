@@ -4,6 +4,8 @@ import org.springframework.context.SmartLifecycle;
 import org.springframework.stereotype.Component;
 
 /**
+ * 实现Lifecycle接口后，Spring在容器启动或关闭时会执行相应方法
+ *
  * @author hoby
  * @since 2024-01-08
  */
@@ -15,13 +17,13 @@ public class MyLifecycle implements SmartLifecycle {
 	@Override
 	public void start() {
 		this.isRunning = true;
-		System.out.println("容器启动...");
+		System.out.println("容器启动");
 	}
 
 	@Override
 	public void stop() {
 		this.isRunning = false;
-		System.out.println("容器关闭...");
+		System.out.println("容器关闭");
 	}
 
 	@Override

@@ -18,7 +18,7 @@ public class MyBeanPostProcessor implements BeanPostProcessor {
 	@Override
 	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
 		if ("userService".equals(beanName)) {
-			System.out.println("MyBeanPostProcessor: bean 初始化前...");
+			System.out.println("UserService 初始化前");
 		}
 		return bean;
 	}
@@ -26,7 +26,7 @@ public class MyBeanPostProcessor implements BeanPostProcessor {
 	@Override
 	public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
 		if ("userService".equals(beanName)) {
-			System.out.println("MyBeanPostProcessor: bean 初始化后...");
+			System.out.println("UserService 初始化后");
 		}
 		return bean;
 	}

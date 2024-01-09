@@ -36,7 +36,7 @@ public class AppConfig {
 	}
 
 	/**
-	 * 注册JDK提供的PropertyEditor，与Spring提供的相比优先级更高
+	 * 注册JDK提供的PropertyEditor，优先级比Spring提供的高
 	 */
 	@Bean
 	public CustomEditorConfigurer customEditorConfigurer() {
@@ -62,7 +62,7 @@ public class AppConfig {
 	}
 
 	/**
-	 * 相同类型及名字的bean只会注册一次
+	 * 相同类型及名字的bean只会注册一次（比如类上已经有@Component注解，又通过@Bean注册了，此时只会存在一个bean）
 	 */
 	@Bean
 	public OrderService orderService() {
@@ -78,4 +78,5 @@ public class AppConfig {
 	public OrderService orderService2() {
 		return new OrderService();
 	}
+
 }

@@ -2,6 +2,8 @@ package com.hoby.service;
 
 import com.hoby.annotation.RoundRobin;
 import com.hoby.entity.User;
+import com.hoby.mapper.OrderMapper;
+import com.hoby.mapper.UserMapper;
 import com.hoby.strategy.LoadBalance;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.SmartInitializingSingleton;
@@ -30,8 +32,9 @@ public class UserService implements SmartInitializingSingleton, DisposableBean {
 	private OrderService orderService2;
 
 	/**
-	 * 如果@Autowired的类型是一个map，且key为string类型，则spring会注入类型为value的所有bean到这个map中；
-	 * 同理，如果@Autowired的类型是一个list，spring会将list指定泛型类型的bean都注入到这个list中，如果泛型是Object，则会注入spring容器中的所有bean。
+	 * 如果@Autowired的类型是一个Map，且key为String类型，则Spring会注入类型为value的所有bean到这个Map中；
+	 * 同理，如果@Autowired的类型是一个List，Spring会将List指定泛型类型的bean都注入到这个List中；
+	 * 如果泛型是Object，则会注入Spring容器中的所有bean。
 	 */
 	@Autowired
 	private Map<String, OrderService> orderServiceMap;
@@ -55,6 +58,11 @@ public class UserService implements SmartInitializingSingleton, DisposableBean {
 	@Value("hoby")
 	private User user;
 
+	@Autowired
+	private UserMapper userMapper;
+	@Autowired
+	private OrderMapper orderMapper;
+
 	public UserService() {
 	}
 
@@ -77,8 +85,9 @@ public class UserService implements SmartInitializingSingleton, DisposableBean {
 
 	@Override
 	public void afterSingletonsInstantiated() {
-		// 在所有非懒加载单例bean都创建完之后，会逐个调用每个bean的此方法
+		// 在所有非懒加载单例bean都创建完之后，会逐个调用实现了SmartInitializingSingleton接口的此方法
 		// ...
+		System.out.println("UserService afterSingletonsInstantiated");
 	}
 
 	public void test() {
@@ -90,13 +99,16 @@ public class UserService implements SmartInitializingSingleton, DisposableBean {
 		System.out.println("loadBalance.select() = " + loadBalance.select());
 		System.out.println("user = " + user);
 
+		System.out.println("userMapper.selectById() = " + userMapper.selectById());
+		System.out.println("orderMapper.selectById() = " + orderMapper.selectById());
+
 		System.out.println("UserService.test() end");
 	}
 
 	@Transactional
 	public void insertUser() {
 		jdbcTemplate.execute("insert into t_user values (null, 'hoby', '123456')");
-		// 调用同类的事务方法，应使用该类的代理对象去调用，否则调用方法的事务注解会失效
+		// 调用同类的事务方法，应使用该类的代理对象去调用，否则调用方法上的事务注解会失效
 		userService.innerMethod();
 	}
 
@@ -107,12 +119,12 @@ public class UserService implements SmartInitializingSingleton, DisposableBean {
 
 	@PreDestroy
 	public void preDestroy() {
-		System.out.println("userService preDestroy");
+		System.out.println("UserService preDestroy");
 	}
 
 	@Override
 	public void destroy() throws Exception {
-		System.out.println("userService destroy");
+		System.out.println("UserService destroy");
 	}
 
 }
