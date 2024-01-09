@@ -7,6 +7,7 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -19,11 +20,14 @@ import java.util.Map;
  * @author hoby
  * @since 2023-12-25
  */
+@Lazy
 @Service
 public class UserService implements SmartInitializingSingleton, DisposableBean {
 
 	@Autowired
 	private OrderService orderService;
+	private OrderService orderService1;
+	private OrderService orderService2;
 
 	/**
 	 * 如果@Autowired的类型是一个map，且key为string类型，则spring会注入类型为value的所有bean到这个map中；
@@ -51,20 +55,25 @@ public class UserService implements SmartInitializingSingleton, DisposableBean {
 	@Value("hoby")
 	private User user;
 
+	public UserService() {
+	}
+
 	/**
 	 * 在有多个构造方法时，Spring默认使用无参构造方法
 	 * 如果没有无参构造，若只有一个有参构造，则Spring会直接使用这个有参构造
 	 * 但如果有多个有参构造，则需要使用@Autowired注解告诉Spring使用哪个构造方法
 	 */
 	// @Autowired
-	// public UserService(OrderService orderService) {
-	// 	this.orderService = orderService;
-	// }
+	public UserService(OrderService orderService) {
+		System.out.println(1);
+		this.orderService = orderService;
+	}
 
-	// public UserService(OrderService orderService1, OrderService orderService2) {
-	// 	this.orderService1 = orderService1;
-	// 	this.orderService2 = orderService2;
-	// }
+	public UserService(OrderService orderService1, OrderService orderService2) {
+		System.out.println(2);
+		this.orderService1 = orderService1;
+		this.orderService2 = orderService2;
+	}
 
 	@Override
 	public void afterSingletonsInstantiated() {
