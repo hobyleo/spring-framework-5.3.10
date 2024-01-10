@@ -24,7 +24,7 @@ import java.util.Map;
  */
 @Lazy
 @Service
-public class UserService implements SmartInitializingSingleton, DisposableBean {
+public class UserService implements UserInterface, SmartInitializingSingleton, DisposableBean {
 
 	@Autowired
 	private OrderService orderService;
@@ -90,17 +90,17 @@ public class UserService implements SmartInitializingSingleton, DisposableBean {
 		System.out.println("UserService afterSingletonsInstantiated");
 	}
 
+	@Override
 	public void test() {
 		System.out.println("UserService.test() start");
 
-		System.out.println("orderService = " + orderService);
-		System.out.println("orderServiceMap = " + orderServiceMap);
-		System.out.println("orderInterface = " + orderInterface);
-		System.out.println("loadBalance.select() = " + loadBalance.select());
-		System.out.println("user = " + user);
-
-		System.out.println("userMapper.selectById() = " + userMapper.selectById());
-		System.out.println("orderMapper.selectById() = " + orderMapper.selectById());
+		// System.out.println("orderService = " + orderService);
+		// System.out.println("orderServiceMap = " + orderServiceMap);
+		// System.out.println("orderInterface = " + orderInterface);
+		// System.out.println("loadBalance.select() = " + loadBalance.select());
+		// System.out.println("user = " + user);
+		// System.out.println("userMapper.selectById() = " + userMapper.selectById());
+		// System.out.println("orderMapper.selectById() = " + orderMapper.selectById());
 
 		System.out.println("UserService.test() end");
 	}

@@ -15,6 +15,7 @@ dependencies {
     implementation project(':spring-instrument')
     implementation project(':spring-jdbc')
 
+    implementation 'cglib:cglib:3.2.12'
     implementation 'org.aspectj:aspectjrt:1.9.5'
     implementation 'org.aspectj:aspectjweaver:1.9.5'
 
