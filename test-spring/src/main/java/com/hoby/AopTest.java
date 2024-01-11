@@ -1,16 +1,15 @@
 package com.hoby;
 
+import com.hoby.advice.MyAroundAdvice1;
+import com.hoby.advice.MyAroundAdvice2;
 import com.hoby.service.UserInterface;
 import com.hoby.service.UserService;
 import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
-import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.framework.ProxyFactory;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -74,16 +73,8 @@ public class AopTest {
 
 		ProxyFactory proxyFactory = new ProxyFactory();
 		proxyFactory.setTarget(target);
-		proxyFactory.addAdvice(new org.aopalliance.intercept.MethodInterceptor() {
-			@Nullable
-			@Override
-			public Object invoke(@Nonnull MethodInvocation invocation) throws Throwable {
-				System.out.println("before");
-				Object result = invocation.proceed();
-				System.out.println("after");
-				return result;
-			}
-		});
+		proxyFactory.addAdvice(new MyAroundAdvice1());
+		proxyFactory.addAdvice(new MyAroundAdvice2());
 
 		UserInterface userService = (UserInterface) proxyFactory.getProxy();
 		userService.test();
