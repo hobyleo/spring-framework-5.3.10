@@ -102,6 +102,16 @@ public class AopTest {
 			}
 		});
 
+		/*
+		 * 代理对象执行过程：
+		 * 1. 在使用ProxyFactory创建代理对象之前，需要往ProxyFactory先添加Advisor
+		 * 2. 代理对象在执行某个方法时，会把ProxyFactory中的Advisor拿出来和当前正在执行的方法进行匹配筛选
+		 * 3. 把和方法所匹配的Advisor适配成MethodInterceptor
+		 * 4. 把和当前方法匹配的MethodInterceptor链，以及被代理对象、代理对象、代理类、当前Method对象、方法参数封装为MethodInvocation对象
+		 * 5. 调用MethodInvocation的proceed()方法，开始执行各个MethodInterceptor以及被代理对象的对应方法
+		 * 6. 按顺序调用每个MethodInterceptor的invoke()方法，并且会把MethodInvocation对象传入invoke()方法
+		 * 7. 直到执行完最后一个MethodInterceptor了，就会调用invokeJoinpoint()方法，从而执行被代理对象的当前方法
+		 */
 		UserService userService = (UserService) proxyFactory.getProxy();
 		// userService.test();
 		userService.a();
