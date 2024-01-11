@@ -19,9 +19,32 @@ import java.util.HashMap;
  * @author hoby
  * @since 2023-12-25
  */
+// @Import(DefaultAdvisorAutoProxyCreator.class)
 @ComponentScan("com.hoby")
 @EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
 public class AppConfig {
+
+	/*@Bean
+	public BeanNameAutoProxyCreator beanNameAutoProxyCreator() {
+		// 基于 BeanPostProcessor 实现
+		BeanNameAutoProxyCreator beanNameAutoProxyCreator = new BeanNameAutoProxyCreator();
+		beanNameAutoProxyCreator.setBeanNames("userService*");
+		beanNameAutoProxyCreator.setInterceptorNames("myBeforeAdvice");
+		beanNameAutoProxyCreator.setProxyTargetClass(true);
+		return beanNameAutoProxyCreator;
+	}*/
+
+	/*@Bean
+	public DefaultPointcutAdvisor defaultPointcutAdvisor() {
+		NameMatchMethodPointcut pointcut = new NameMatchMethodPointcut();
+		pointcut.addMethodName("test");
+
+		DefaultPointcutAdvisor defaultPointcutAdvisor = new DefaultPointcutAdvisor();
+		defaultPointcutAdvisor.setPointcut(pointcut);
+		defaultPointcutAdvisor.setAdvice(new MyAfterReturningAdvice());
+
+		return defaultPointcutAdvisor;
+	}*/
 
 	/**
 	 * 注册Spring提供的类型转化工具，优先级比PropertyEditor低

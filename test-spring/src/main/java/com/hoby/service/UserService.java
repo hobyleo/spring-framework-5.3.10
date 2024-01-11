@@ -127,4 +127,7 @@ public class UserService implements UserInterface, SmartInitializingSingleton, D
 		System.out.println("UserService destroy");
 	}
 
+	public void a() {
+		System.out.println("a");
+	}
 }

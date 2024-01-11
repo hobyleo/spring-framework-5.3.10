@@ -1,6 +1,6 @@
 package com.hoby.config;
 
-import com.hoby.service.UserService;
+import com.hoby.entity.User;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.stereotype.Component;
 
@@ -14,18 +14,19 @@ import org.springframework.stereotype.Component;
  * @since 2023-12-26
  */
 @Component
-// @Component("userService")
 public class MyFactoryBean implements FactoryBean {
 
 	@Override
 	public Object getObject() throws Exception {
-		UserService userService = new UserService();
-		return userService;
+		User user = new User();
+		user.setUsername("Jesse Pinkman");
+		user.setPassword("yoyoyo");
+		return user;
 	}
 
 	@Override
 	public Class<?> getObjectType() {
-		return UserService.class;
+		return User.class;
 	}
 
 	@Override

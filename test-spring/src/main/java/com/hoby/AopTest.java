@@ -1,14 +1,17 @@
 package com.hoby;
 
-import com.hoby.advice.MyAroundAdvice1;
-import com.hoby.advice.MyAroundAdvice2;
+import com.hoby.advice.MyBeforeAdvice;
 import com.hoby.service.UserInterface;
 import com.hoby.service.UserService;
 import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
+import org.aopalliance.aop.Advice;
+import org.springframework.aop.Pointcut;
+import org.springframework.aop.PointcutAdvisor;
 import org.springframework.aop.framework.ProxyFactory;
+import org.springframework.aop.support.StaticMethodMatcherPointcut;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -73,11 +76,35 @@ public class AopTest {
 
 		ProxyFactory proxyFactory = new ProxyFactory();
 		proxyFactory.setTarget(target);
-		proxyFactory.addAdvice(new MyAroundAdvice1());
-		proxyFactory.addAdvice(new MyAroundAdvice2());
+		// proxyFactory.addAdvice(new MyAroundAdvice1());
+		// proxyFactory.addAdvice(new MyAroundAdvice2());
 
-		UserInterface userService = (UserInterface) proxyFactory.getProxy();
-		userService.test();
+		// advisor = pointcut + advice
+		proxyFactory.addAdvisor(new PointcutAdvisor() {
+			@Override
+			public Pointcut getPointcut() {
+				return new StaticMethodMatcherPointcut() {
+					@Override
+					public boolean matches(Method method, Class<?> targetClass) {
+						return method.getName().equals("test");
+					}
+				};
+			}
+
+			@Override
+			public Advice getAdvice() {
+				return new MyBeforeAdvice();
+			}
+
+			@Override
+			public boolean isPerInstance() {
+				return false;
+			}
+		});
+
+		UserService userService = (UserService) proxyFactory.getProxy();
+		// userService.test();
+		userService.a();
 	}
 
 }

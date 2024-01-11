@@ -30,7 +30,7 @@ public class StringToUserConverter implements ConditionalGenericConverter {
 	public Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
 		User user = new User();
 		user.setUsername((String) source);
-		user.setPassword("666666");
+		user.setPassword("spring666");
 		return user;
 	}
 }

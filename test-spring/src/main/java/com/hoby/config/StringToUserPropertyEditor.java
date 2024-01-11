@@ -17,7 +17,7 @@ public class StringToUserPropertyEditor extends PropertyEditorSupport implements
 	public void setAsText(String text) throws IllegalArgumentException {
 		User user = new User();
 		user.setUsername(text);
-		user.setPassword("123456");
+		user.setPassword("jdk666");
 		this.setValue(user);
 	}
 }

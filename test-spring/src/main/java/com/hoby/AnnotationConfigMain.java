@@ -1,7 +1,6 @@
 package com.hoby;
 
 import com.hoby.config.AppConfig;
-import com.hoby.entity.User;
 import com.hoby.service.UserService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -26,8 +25,6 @@ public class AnnotationConfigMain {
 		System.out.println("myFactoryBean = " + context.getBean("myFactoryBean"));
 		// 拿到的是FactoryBean对象本身（添加&前缀）
 		System.out.println("&myFactoryBean = " + context.getBean("&myFactoryBean"));
-
-		System.out.println("getBean(User.class) = " + context.getBean(User.class));
 
 	}
 }

@@ -1,6 +1,7 @@
 package com.hoby.advice;
 
 import org.springframework.aop.ThrowsAdvice;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 
@@ -10,6 +11,7 @@ import java.lang.reflect.Method;
  * @author hoby
  * @since 2024-01-11
  */
+@Component
 public class MyThrowsAdvice implements ThrowsAdvice {
 
 	public void afterThrowing(Method method, Object[] args, Object target, Exception ex) {
