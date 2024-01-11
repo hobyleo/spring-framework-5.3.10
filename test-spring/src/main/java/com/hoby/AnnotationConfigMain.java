@@ -18,8 +18,8 @@ public class AnnotationConfigMain {
 		UserService userService = (UserService) context.getBean("userService");
 		// 如果bean是懒加载的，在getBean时传递参数，可以实现指定使用哪个构造方法
 		// UserService userService = (UserService) context.getBean("userService", new OrderService());
-		userService.test();
-		// userService.insertUser();
+		// userService.test();
+		userService.insertUser();
 
 		// 拿到的是getObject()返回的对象
 		System.out.println("myFactoryBean = " + context.getBean("myFactoryBean"));
