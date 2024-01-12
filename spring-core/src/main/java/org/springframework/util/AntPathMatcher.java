@@ -16,16 +16,12 @@
 
 package org.springframework.util;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import org.springframework.lang.Nullable;
+
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.springframework.lang.Nullable;
 
 /**
  * {@link PathMatcher} implementation for Ant-style path patterns.
@@ -775,6 +771,9 @@ public class AntPathMatcher implements PathMatcher {
 		 */
 		@Override
 		public int compare(String pattern1, String pattern2) {
+
+			// 优先级：= > ? > * > {} > **
+
 			PatternInfo info1 = new PatternInfo(pattern1);
 			PatternInfo info2 = new PatternInfo(pattern2);
 
